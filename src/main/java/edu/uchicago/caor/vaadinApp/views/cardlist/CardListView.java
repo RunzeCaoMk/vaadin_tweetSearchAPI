@@ -6,8 +6,6 @@ import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.grid.ItemClickEvent;
 import com.vaadin.flow.component.html.Div;
-import com.vaadin.flow.component.html.Image;
-import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
@@ -16,13 +14,15 @@ import com.vaadin.flow.router.AfterNavigationObserver;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouteAlias;
-import edu.uchicago.caor.vaadinApp.models.Item;
-import edu.uchicago.caor.vaadinApp.models.VolumesResponse;
+import edu.uchicago.caor.vaadinApp.models.Datum;
+import edu.uchicago.caor.vaadinApp.models.TweetsResponse;
 import edu.uchicago.caor.vaadinApp.service.AsyncRestCallback;
-import edu.uchicago.caor.vaadinApp.service.BookService;
+import edu.uchicago.caor.vaadinApp.service.TweetService;
 import edu.uchicago.caor.vaadinApp.views.MainLayout;
 import elemental.json.JsonObject;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,17 +31,17 @@ import java.util.List;
 @RouteAlias(value = "", layout = MainLayout.class)
 public class CardListView extends Div implements AfterNavigationObserver {
 
-    private BookService bookService;
-    private Grid<Item> grid = new Grid<>();
+    private TweetService tweetService;
+    private Grid<Datum> grid = new Grid<>();
     private int startIndex = 0;
     private boolean isLoading = false;
 
-    private List<Item> items = new ArrayList<>();
+    private List<Datum> items = new ArrayList<>();
     private TextField textField;
     private String searchTerm;
 
-    public CardListView(BookService bookService) {
-        this.bookService = bookService;
+    public CardListView(TweetService tweetService) {
+        this.tweetService = tweetService;
         textField = new TextField();
         textField.setLabel("Search Term");
         textField.setPlaceholder("search...");
@@ -54,7 +54,13 @@ public class CardListView extends Div implements AfterNavigationObserver {
                         searchTerm = textField.getValue();
                         startIndex = 0;
                         items.clear();
-                        getBooks(searchTerm);
+                        try {
+                            getTweets(searchTerm);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        } catch (URISyntaxException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
         );
@@ -63,9 +69,9 @@ public class CardListView extends Div implements AfterNavigationObserver {
         grid.setHeight("100%");
         grid.addThemeVariants(GridVariant.LUMO_NO_BORDER, GridVariant.LUMO_NO_ROW_BORDERS);
         grid.addComponentColumn(item -> createCard(item));
-        grid.addItemClickListener(new ComponentEventListener<ItemClickEvent<Item>>() {
+        grid.addItemClickListener(new ComponentEventListener<ItemClickEvent<Datum>>() {
             @Override
-            public void onComponentEvent(ItemClickEvent<Item> itemItemClickEvent) {
+            public void onComponentEvent(ItemClickEvent<Datum> itemItemClickEvent) {
                 System.out.println(itemItemClickEvent.getItem());
             }
         });
@@ -73,19 +79,19 @@ public class CardListView extends Div implements AfterNavigationObserver {
         add(textField, withClientsideScrollListener(grid));
     }
 
-    private void getBooks(String searchTerm) {
+    private void getTweets(String searchTerm) throws IOException, URISyntaxException {
         isLoading = true;
 
-       AsyncRestCallback<VolumesResponse> cardListCallback = volumesResponse -> {
+       AsyncRestCallback<TweetsResponse> cardListCallback = tweetsResponse -> {
 
             //we must fire this callback on the UI thread and that is why we use getUi().get().acccess(() ->
             getUI().get().access(() -> {
 
                 //this is the callback result, so volumesResponse is the volumesResponse returned from
                 //      void operationFinished(T results);
-                items.addAll(volumesResponse.getItems());
+                items.addAll(tweetsResponse.getData());
                 grid.setItems(items);
-                startIndex += BookService.MAX_RESULTS;
+                startIndex += TweetService.MAX_RESULTS;
                 isLoading = false;
                 //https://vaadin.com/docs/v14/flow/advanced/tutorial-push-access
                 //we need to notify the browser when we are done. Note that the parent-view MainView is annotated with
@@ -96,12 +102,12 @@ public class CardListView extends Div implements AfterNavigationObserver {
         };
 
         //the callback is expressed as a lambda. We hae access to the members of this class, such as grid, items, etc.
-        bookService.getBooks(cardListCallback, searchTerm, BookService.MAX_RESULTS, startIndex);
+        tweetService.getTweets(cardListCallback, searchTerm, TweetService.MAX_RESULTS, startIndex);
 
     }
 
     //we wrap the Vaadin grid with this so that it emits this event at every gridScroll.
-    private Grid<Item> withClientsideScrollListener(Grid<Item> grid) {
+    private Grid<Datum> withClientsideScrollListener(Grid<Datum> grid) {
         grid.getElement().executeJs(
                 "this.$.scroller.addEventListener('scroll', (scrollEvent) => " +
                         "{requestAnimationFrame(" +
@@ -114,7 +120,7 @@ public class CardListView extends Div implements AfterNavigationObserver {
 
     //this is called by the javaScript above on the server, which forces the grid fetch records and scroll back to 1/2
     @ClientCallable
-    public void onGridScroll(JsonObject scrollEvent) {
+    public void onGridScroll(JsonObject scrollEvent) throws IOException, URISyntaxException {
         int scrollHeight = (int) scrollEvent.getNumber("sh");
         int clientHeight = (int) scrollEvent.getNumber("ch");
         int scrollTop = (int) scrollEvent.getNumber("st");
@@ -124,7 +130,7 @@ public class CardListView extends Div implements AfterNavigationObserver {
         if (percentage == 1.0) {
 
             if (!isLoading) {
-                getBooks(searchTerm);
+                getTweets(searchTerm);
             }
             grid.scrollToIndex(items.size() / 2);
 
@@ -132,14 +138,14 @@ public class CardListView extends Div implements AfterNavigationObserver {
 
     }
 
-    private HorizontalLayout createCard(Item item) {
+    private HorizontalLayout createCard(Datum item) {
         HorizontalLayout card = new HorizontalLayout();
         card.addClassName("card");
         card.setSpacing(false);
         card.getThemeList().add("spacing-s");
 
-        Image image = new Image();
-        image.setSrc(getSmallThumbnail(item));
+//        Image image = new Image();
+//        image.setSrc(getSmallThumbnail(item));
         VerticalLayout description = new VerticalLayout();
         description.addClassName("description");
         description.setSpacing(false);
@@ -150,39 +156,18 @@ public class CardListView extends Div implements AfterNavigationObserver {
         header.setSpacing(false);
         header.getThemeList().add("spacing-s");
 
-        Span name = new Span(getAuthor(item));
-        name.addClassName("name");
-        Span date = new Span(getPublisher(item));
-        date.addClassName("date");
-        header.add(name, date);
+//        Span name = new Span(getAuthor(item));
+//        name.addClassName("name");
+//        Span date = new Span(getPublisher(item));
+//        date.addClassName("date");
+//        header.add(name, date);
 
 
         description.add(header);
-        card.add(image, description);
+//        card.add(image, description);
         return card;
     }
 
-    private String getPublisher(Item item) {
-        if (null == item.getVolumeInfo() || null == item.getVolumeInfo().getPublisher()) {
-            return "";
-        }
-        return item.getVolumeInfo().getPublisher();
-    }
-
-    private String getAuthor(Item item) {
-        if (null == item.getVolumeInfo() || null == item.getVolumeInfo().getAuthors()) {
-            return "";
-        }
-        return item.getVolumeInfo().getAuthors().get(0);
-    }
-
-    private String getSmallThumbnail(Item item) {
-        if (null == item.getVolumeInfo() || null == item.getVolumeInfo().getImageLinks() || null ==
-                item.getVolumeInfo().getImageLinks().getSmallThumbnail()) {
-            return "https://randomuser.me/api/portraits/men/16.jpg";
-        }
-        return item.getVolumeInfo().getImageLinks().getSmallThumbnail();
-    }
 
     @Override
     public void afterNavigation(AfterNavigationEvent event) {

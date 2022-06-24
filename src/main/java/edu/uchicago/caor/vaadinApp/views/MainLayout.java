@@ -24,7 +24,6 @@ import java.util.Optional;
 public class MainLayout extends AppLayout {
 
     private final Tabs menu;
-  //  private H1 viewTitle;
 
     public MainLayout() {
         setPrimarySection(Section.DRAWER);
@@ -41,9 +40,6 @@ public class MainLayout extends AppLayout {
         layout.setSpacing(false);
         layout.setAlignItems(FlexComponent.Alignment.CENTER);
         layout.add(new DrawerToggle());
-//        viewTitle = new H1();
-//        layout.add(viewTitle);
-       // layout.add(new Avatar());
         return layout;
     }
 
@@ -57,8 +53,7 @@ public class MainLayout extends AppLayout {
         HorizontalLayout logoLayout = new HorizontalLayout();
         logoLayout.setId("logo");
         logoLayout.setAlignItems(FlexComponent.Alignment.CENTER);
-      //  logoLayout.add(new Image("images/logo.png", "My App logo"));
-        H3 h3 =  new H3("Google Book Search");
+        H3 h3 =  new H3("Twitter Search");
 
         logoLayout.add(h3);
         layout.add(logoLayout, menu);
@@ -89,7 +84,6 @@ public class MainLayout extends AppLayout {
     protected void afterNavigation() {
         super.afterNavigation();
         getTabForComponent(getContent()).ifPresent(menu::setSelectedTab);
-      //  viewTitle.setText(getCurrentPageTitle());
     }
 
     private Optional<Tab> getTabForComponent(Component component) {
