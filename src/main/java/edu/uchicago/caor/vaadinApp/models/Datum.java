@@ -8,12 +8,23 @@ import com.google.gson.annotations.SerializedName;
 @Generated("jsonschema2pojo")
 public class Datum {
 
+    @SerializedName("author_id")
+    @Expose
+    private String authorId;
     @SerializedName("id")
     @Expose
     private String id;
     @SerializedName("text")
     @Expose
     private String text;
+
+    public String getAuthorId() {
+        return authorId;
+    }
+
+    public void setAuthorId(String authorId) {
+        this.authorId = authorId;
+    }
 
     public String getId() {
         return id;

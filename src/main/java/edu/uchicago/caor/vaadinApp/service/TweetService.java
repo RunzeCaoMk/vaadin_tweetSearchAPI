@@ -21,9 +21,9 @@ public class TweetService {
 
    //READ paged
     public void getTweets(AsyncRestCallback<TweetsResponse> callback, String search, int maxResults,
-                          int startIndex) throws IOException, URISyntaxException {
+                          String next_token) throws IOException, URISyntaxException {
         // call get Tweets method to get API response
-        tweetRepository.getTweets(callback, search, maxResults, startIndex);
+        tweetRepository.getTweets(callback, search, maxResults, next_token);
     }
 
 

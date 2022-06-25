@@ -70,7 +70,7 @@ public class MainLayout extends AppLayout {
     }
 
     private Component[] createMenuItems() {
-        return new Tab[]{createTab("Card List", CardListView.class), createTab("About", AboutView.class)};
+        return new Tab[]{createTab("About", AboutView.class), createTab("Tweet List", CardListView.class)};
     }
 
     private static Tab createTab(String text, Class<? extends Component> navigationTarget) {
