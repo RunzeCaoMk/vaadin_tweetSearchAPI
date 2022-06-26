@@ -11,7 +11,6 @@ import java.net.URISyntaxException;
 
 @Service
 public class TweetService {
-
     public static final int MAX_RESULTS = 20;
     private TweetRepository tweetRepository;
 
@@ -21,11 +20,8 @@ public class TweetService {
 
    //READ paged
     public void getTweets(AsyncRestCallback<TweetsResponse> callback, String search, int maxResults,
-                          String next_token) throws IOException, URISyntaxException {
+                          String next_token) {
         // call get Tweets method to get API response
         tweetRepository.getTweets(callback, search, maxResults, next_token);
     }
-
-
-
 }
