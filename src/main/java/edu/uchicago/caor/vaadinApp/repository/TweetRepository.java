@@ -37,7 +37,7 @@ public class TweetRepository {
             e.printStackTrace();
         }
         ArrayList<NameValuePair> queryParameters = new ArrayList<>();
-        queryParameters.add(new BasicNameValuePair("query", searchString));
+        queryParameters.add(new BasicNameValuePair("query", searchString + " lang:en"));
         queryParameters.add(new BasicNameValuePair("expansions", "author_id"));
         queryParameters.add(new BasicNameValuePair("max_results", String.valueOf(maxResults)));
 //        queryParameters.add(new BasicNameValuePair("tweet.fields", "author_id"));
