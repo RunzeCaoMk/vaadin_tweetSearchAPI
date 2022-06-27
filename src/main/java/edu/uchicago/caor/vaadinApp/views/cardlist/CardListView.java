@@ -48,6 +48,7 @@ public class CardListView extends Div implements AfterNavigationObserver {
         searchText = new TextField();
         searchText.setLabel("Search Term");
         searchText.setPlaceholder("search...");
+        searchText.setClearButtonVisible(true);
         searchText.setAutofocus(true);
         searchText.setWidthFull();
         searchText.addKeyDownListener(keyDownEvent -> {

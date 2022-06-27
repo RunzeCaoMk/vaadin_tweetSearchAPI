@@ -8,6 +8,7 @@ import com.vaadin.flow.theme.Theme;
 import com.vaadin.flow.theme.lumo.Lumo;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.web.servlet.error.ErrorMvcAutoConfiguration;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 
 /**
@@ -18,10 +19,10 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
  *
  */
 @Push
-@SpringBootApplication
-@Theme(value = "myapp", variant = Lumo.DARK)
+@SpringBootApplication(exclude = ErrorMvcAutoConfiguration.class)
+@Theme(value = "myapp", variant = Lumo.LIGHT)
 @PWA(name = "My App", shortName = "My App", offlineResources = {})
-@NpmPackage(value = "line-awesome", version = "1.3.0")
+@NpmPackage(value = "lumo-css-framework", version = "^4.0.10")
 public class Application extends SpringBootServletInitializer implements AppShellConfigurator {
 
     public static void main(String[] args) {
