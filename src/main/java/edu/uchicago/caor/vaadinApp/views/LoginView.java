@@ -1,6 +1,9 @@
 package edu.uchicago.caor.vaadinApp.views;
 
 import com.vaadin.flow.component.html.H1;
+import com.vaadin.flow.component.html.H4;
+import com.vaadin.flow.component.html.H5;
+import com.vaadin.flow.component.html.H6;
 import com.vaadin.flow.component.login.LoginForm;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.BeforeEnterEvent;
@@ -22,7 +25,11 @@ public class LoginView extends VerticalLayout implements BeforeEnterObserver {
 
 		login.setAction("login"); 
 
-		add(new H1("Vaadin CRM"), login);
+		add(new H1("Twitter Search"),
+				login,
+				new H5("User: user"),
+				new H5("Password: userpass")
+		);
 	}
 
 	@Override

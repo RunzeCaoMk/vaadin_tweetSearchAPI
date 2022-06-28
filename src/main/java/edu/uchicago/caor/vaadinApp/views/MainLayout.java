@@ -4,6 +4,7 @@ import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentUtil;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -13,6 +14,7 @@ import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.component.tabs.TabsVariant;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.RouterLink;
+import edu.uchicago.caor.vaadinApp.security.SecurityService;
 import edu.uchicago.caor.vaadinApp.views.about.AboutView;
 import edu.uchicago.caor.vaadinApp.views.cardlist.CardListView;
 
@@ -24,8 +26,10 @@ import java.util.Optional;
 public class MainLayout extends AppLayout {
 
     private final Tabs menu;
+    private final SecurityService securityService;
 
-    public MainLayout() {
+    public MainLayout(SecurityService securityService) {
+        this.securityService = securityService;
         setPrimarySection(Section.DRAWER);
         addToNavbar(true, createHeaderContent());
         menu = createMenu();
@@ -54,9 +58,10 @@ public class MainLayout extends AppLayout {
         logoLayout.setId("logo");
         logoLayout.setAlignItems(FlexComponent.Alignment.CENTER);
         H3 h3 =  new H3("Twitter Search");
+        Button logout = new Button("Log out", e -> securityService.logout());
 
         logoLayout.add(h3);
-        layout.add(logoLayout, menu);
+        layout.add(logoLayout, menu, logout);
         return layout;
     }
 

@@ -23,11 +23,13 @@ import edu.uchicago.caor.vaadinApp.service.TweetService;
 import edu.uchicago.caor.vaadinApp.views.MainLayout;
 import elemental.json.JsonObject;
 
+import javax.annotation.security.PermitAll;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
+@PermitAll
 @PageTitle("Card List")
 @Route(value = "card-list", layout = MainLayout.class)
 @RouteAlias(value = "", layout = MainLayout.class)

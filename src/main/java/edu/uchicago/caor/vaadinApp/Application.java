@@ -20,9 +20,9 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
  */
 @Push
 @SpringBootApplication(exclude = ErrorMvcAutoConfiguration.class)
-@Theme(value = "myapp", variant = Lumo.LIGHT)
+@Theme(value = "myapp", variant = Lumo.DARK)
 @PWA(name = "My App", shortName = "My App", offlineResources = {})
-@NpmPackage(value = "lumo-css-framework", version = "^4.0.10")
+@NpmPackage(value = "line-awesome", version = "1.3.0")
 public class Application extends SpringBootServletInitializer implements AppShellConfigurator {
 
     public static void main(String[] args) {

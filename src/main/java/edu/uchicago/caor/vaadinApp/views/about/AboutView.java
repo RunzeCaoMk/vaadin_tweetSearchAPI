@@ -10,7 +10,9 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import edu.uchicago.caor.vaadinApp.views.MainLayout;
 
+import javax.annotation.security.PermitAll;
 
+@PermitAll
 @PageTitle("About")
 @Route(value = "about", layout = MainLayout.class)
 public class AboutView extends VerticalLayout {
@@ -22,8 +24,9 @@ public class AboutView extends VerticalLayout {
         img.setWidth("200px");
         add(img);
 
-        add(new H2("This place intentionally left empty"));
-        add(new Paragraph("It’s a place where you can grow your own UI 🤗"));
+        add(new H2("This is a tweet search website"));
+        add(new Paragraph("This is the v1.0 of the tweet search api, using  Twitter API v2. More features will be " +
+                "added in the future like get the whole conversation information from eac tweet result."));
 
         setSizeFull();
         setJustifyContentMode(JustifyContentMode.CENTER);
