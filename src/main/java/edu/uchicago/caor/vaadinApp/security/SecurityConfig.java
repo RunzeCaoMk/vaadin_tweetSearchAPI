@@ -46,6 +46,7 @@ public class SecurityConfig extends VaadinWebSecurityConfigurerAdapter {
             .build());
   }
 
+
 //  @Autowired
 //  public void confGlobalAuthManager(AuthenticationManagerBuilderauth) throws Exception {
 //    auth
