@@ -25,8 +25,8 @@ Once the JAR file is built, you can run it using
 
 - `MainLayout.java` in `src/main/java` contains the navigation setup (i.e., the
   side/top bar and the main menu).
-- `views` package in `src/main/java` contains the server-side Java views of your application.
-- `views` folder in `frontend/` contains the client-side JavaScript views of your application.
+- `views` package in `src/main/java` contains the server-side Java views of the application.
+- `views` folder in `frontend/` contains the client-side JavaScript views of the application.
 - `themes` folder in `frontend/` contains the custom CSS styles.
 
 ## Deploying using Docker
