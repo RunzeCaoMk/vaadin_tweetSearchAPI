@@ -24,6 +24,7 @@ import java.util.ArrayList;
 
 @Repository
 public class TweetRepository {
+    // TODO: delete the token -- "create your own token"
     private static String BEARER_TOKEN = "AAAAAAAAAAAAAAAAAAAAAIR7eAEAAAAAGtUbFRGPU9%2FeOSK%2FNUPlITxs7HQ%3DAsOcMx75iTWuQKtFciAqAHQOefeE4Irecb02MyiBmy0P9hdCgd";
 
     //READ page

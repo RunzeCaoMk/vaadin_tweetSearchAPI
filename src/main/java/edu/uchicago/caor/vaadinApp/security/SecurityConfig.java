@@ -40,6 +40,7 @@ public class SecurityConfig extends VaadinWebSecurityConfigurerAdapter {
   @Bean
   @Override
   public UserDetailsService userDetailsService() {
+    // TODO: remove the hard code
     return new InMemoryUserDetailsManager(User.withUsername("user")
             .password("{noop}userpass")
             .roles("USER")

@@ -23,9 +23,11 @@ Once the JAR file is built, you can run it using
 
 ## Project structure
 
-- `MainLayout.java` in `src/main/java` contains the navigation setup (i.e., the
-  side/top bar and the main menu).
 - `views` package in `src/main/java` contains the server-side Java views of the application.
+- `service` package in `src/main/java` contains the service that call the retrieve the data.
+- `security` package in `src/main/java` contains the login page service and catch.
+- `repository` package in `src/main/java` contains the HTTP connection setting for Twitter API.
+- `models` package in `src/main/java` contains the class entities of Twitter API's response.
 - `views` folder in `frontend/` contains the client-side JavaScript views of the application.
 - `themes` folder in `frontend/` contains the custom CSS styles.
 
